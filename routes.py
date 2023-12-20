@@ -71,10 +71,10 @@ def update_itenary():
         ***REMOVED***
 
     update_info = ***REMOVED***
-        "flights": input.get("flights", []),
-        "hotels": input.get("hotels", []),
-        "car_rentals": input.get("car_rentals", []),
-        "tourism": input.get("tourism", [])
+        "flights": input.get("flights", None),
+        "hotels": input.get("hotels", None),
+        "car_rentals": input.get("car_rentals", None),
+        "tourism": input.get("tourism", None)
     ***REMOVED***
 
     itenary_doc = db.collection("users").document(userid).collection("itenaries").document(itnerary_id)
@@ -92,7 +92,7 @@ def update_itenary():
     ***REMOVED***
 
     for update_key, update_val in update_info.items():
-        if len(update_val) > 0:
+        if update_val is not None:
             delete_collection(db, itenary_doc.collection(update_key))
             for val in update_val:
                 unique_id = uuid.uuid4().hex

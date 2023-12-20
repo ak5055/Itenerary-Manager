@@ -27,6 +27,7 @@ def getItenaries(userid):
     db = get_instance()
     itenary_info = db.collection("users").document(userid).get().to_dict() or ***REMOVED******REMOVED***
     itenary_docs = db.collection("users").document(userid).collection("itenaries")
+    itenary_info["itenaries"] = []
 
     if not check_if_exists(db, userid):
         return ***REMOVED***
@@ -34,25 +35,26 @@ def getItenaries(userid):
         ***REMOVED***
 
     for doc in itenary_docs.stream():
-        it_id = doc.id
-        itenary_info[it_id] = doc.to_dict()
-        itenary_info[it_id]["flights"] = ***REMOVED******REMOVED***
-        itenary_info[it_id]["hotels"] = ***REMOVED******REMOVED***
-        itenary_info[it_id]["car_rentals"] = ***REMOVED******REMOVED***
-        itenary_info[it_id]["tourism"] = ***REMOVED******REMOVED***
+        itenary_dict = doc.to_dict()
+        itenary_dict["flights"] = []
+        itenary_dict["hotels"] = []
+        itenary_dict["car_rentals"] = []
+        itenary_dict["tourism"] = []
         doc_obj = itenary_docs.document(doc.id)
         flights = doc_obj.collection("flights")
         car_rentals = doc_obj.collection("car_rentals")
         hotels = doc_obj.collection("hotels")
         tourism = doc_obj.collection("tourism")
         for flight_doc in flights.stream():
-            itenary_info[it_id]["flights"][flight_doc.id] = flight_doc.to_dict()
+            itenary_dict["flights"].append(flight_doc.to_dict())
         for car_rentals_doc in car_rentals.stream():
-            itenary_info[it_id]["car_rentals"][car_rentals_doc.id] = car_rentals_doc.to_dict()
+            itenary_dict["car_rentals"].append(car_rentals_doc.to_dict())
         for hotels_doc in hotels.stream():
-            itenary_info[it_id]["hotels"][hotels_doc.id] = hotels_doc.to_dict()
+            itenary_dict["hotels"].append(hotels_doc.to_dict())
         for tourism_doc in tourism.stream():
-            itenary_info[it_id]["tourism"][tourism_doc.id] = tourism_doc.to_dict()
+            itenary_dict["tourism"].append(tourism_doc.to_dict())
+
+        itenary_info["itenaries"].append(itenary_dict)
 
     return itenary_info
 
@@ -75,9 +77,9 @@ def update_itenary():
         "tourism": input.get("tourism", [])
     ***REMOVED***
 
-    db.collection("users").document(userid).set(***REMOVED***"id": userid, "budget_currency": input.get("budget_currency", None),
-        "budget_price": input.get("budget_price", None)***REMOVED***)
     itenary_doc = db.collection("users").document(userid).collection("itenaries").document(itnerary_id)
+    itenary_doc.set(***REMOVED***"id": itnerary_id, "budget_currency": input.get("budget_currency", None),
+                     "budget_price": input.get("budget_price", None)***REMOVED***)
     updated_itenary = ***REMOVED***
         "flights": [],
         "hotels": [],
@@ -94,7 +96,7 @@ def update_itenary():
             delete_collection(db, itenary_doc.collection(update_key))
             for val in update_val:
                 unique_id = uuid.uuid4().hex
-                itenary_doc.collection(update_key).document(unique_id).set(val)
+                itenary_doc.collection(update_key).document(unique_id).set(***REMOVED*****val, "id": unique_id***REMOVED***)
 
         updated_itenary[update_key] = [doc.to_dict() for doc in itenary_doc.collection(update_key).stream()]
 
@@ -119,14 +121,13 @@ def create_itenary():
         "itenaryid": itenary_id
     ***REMOVED***
 
-    db.collection("users").document(userid).set(***REMOVED***"id": userid, "budget_currency": input.get("budget_currency", None),
-        "budget_price": input.get("budget_price", None)***REMOVED***)
     itenary_doc = db.collection("users").document(userid).collection("itenaries").document(itenary_id)
-    itenary_doc.set(***REMOVED***"id": itenary_id***REMOVED***)
+    itenary_doc.set(***REMOVED***"id": itenary_id, "budget_currency": input.get("budget_currency", None),
+                     "budget_price": input.get("budget_price", None)***REMOVED***)
     for key, vals in create_info.items():
         for val in vals:
             unique_id = uuid.uuid4().hex
-            itenary_doc.collection(key).document(unique_id).set(val)
+            itenary_doc.collection(key).document(unique_id).set(***REMOVED*****val, "id": unique_id***REMOVED***)
 
     return success_msg
 

@@ -50,7 +50,7 @@ def getItenaries(userid):
         for car_rentals_doc in car_rentals.stream():
             itenary_info[it_id]["car_rentals"][car_rentals_doc.id] = car_rentals_doc.to_dict()
         for hotels_doc in hotels.stream():
-            itenary_info[it_id]["flights"][hotels_doc.id] = hotels_doc.to_dict()
+            itenary_info[it_id]["hotels"][hotels_doc.id] = hotels_doc.to_dict()
         for tourism_doc in tourism.stream():
             itenary_info[it_id]["tourism"][tourism_doc.id] = tourism_doc.to_dict()
 
@@ -121,6 +121,7 @@ def create_itenary():
     ***REMOVED***
 
     itenary_doc = db.collection("users").document(userid).collection("itenaries").document(itenary_id)
+    itenary_doc.set(***REMOVED***"id": itenary_id***REMOVED***)
     for key, vals in create_info.items():
         for val in vals:
             unique_id = uuid.uuid4().hex

@@ -121,6 +121,7 @@ def create_itenary():
         "itenaryid": itenary_id
     ***REMOVED***
 
+    db.collection("users").document(userid).set(***REMOVED***"id": userid***REMOVED***)
     itenary_doc = db.collection("users").document(userid).collection("itenaries").document(itenary_id)
     itenary_doc.set(***REMOVED***"id": itenary_id, "budget_currency": input.get("budget_currency", None),
                      "budget_price": input.get("budget_price", None)***REMOVED***)

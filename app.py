@@ -1,7 +1,7 @@
 from __future__ import annotations
 from routes import routes
 from flask import Flask
-from firestore import get_instance, add_data_db, read_data_db
+from firestore1 import get_instance, add_data_db, read_data_db
 import os
 
 app = Flask(__name__)
@@ -15,4 +15,4 @@ os.environ['GOOGLE_APPLICATION_CREDENTIALS'] = './cloud-computing-408517-b76998c
 # os.environ['INSTANCE_HOST'] = '35.202.158.27'
 
 if __name__ == '__main__':
-    app.run(host="0.0.0.0", port=5035)
+    app.run(host="0.0.0.0", port=8080)

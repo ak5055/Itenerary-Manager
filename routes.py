@@ -1,7 +1,7 @@
 import uuid
 
 from flask import Blueprint, request
-from firestore import get_instance, check_if_exists, delete_collection
+from firestore1 import get_instance, check_if_exists, delete_collection
 
 # from Amadeus.FlightsService.search import FlightsService
 # from ExchangeRates.rates import ExchangeRatesService

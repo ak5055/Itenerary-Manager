@@ -1,0 +1,10 @@
+runtime: python
+env: flex
+entrypoint: gunicorn -b :$PORT app:app
+
+env_variables:
+  GOOGLE_APPLICATION_CREDENTIALS: "./cloud-computing-408517-b76998cb0fc6.json"
+
+runtime_config:
+  operating_system: ubuntu18
+  runtime_version: 3.9

@@ -25,7 +25,7 @@ def getItenaries(userid):
     :return: dict of all the necessary information about flights, car rentals and hotels.
     '''
     db = get_instance()
-    itenary_info = ***REMOVED******REMOVED***
+    itenary_info = db.collection("users").document(userid).get().to_dict() or ***REMOVED******REMOVED***
     itenary_docs = db.collection("users").document(userid).collection("itenaries")
 
     if not check_if_exists(db, userid):
@@ -75,6 +75,8 @@ def update_itenary():
         "tourism": input.get("tourism", [])
     ***REMOVED***
 
+    db.collection("users").document(userid).set(***REMOVED***"id": userid, "budget_currency": input.get("budget_currency", None),
+        "budget_price": input.get("budget_price", None)***REMOVED***)
     itenary_doc = db.collection("users").document(userid).collection("itenaries").document(itnerary_id)
     updated_itenary = ***REMOVED***
         "flights": [],
@@ -82,7 +84,9 @@ def update_itenary():
         "car_rentals": [],
         "tourism": [],
         "itenaryid": itnerary_id,
-        "userid": userid
+        "userid": userid,
+        "budget_currency": input.get("budget_currency", None),
+        "budget_price": input.get("budget_price", None)
     ***REMOVED***
 
     for update_key, update_val in update_info.items():
@@ -115,7 +119,8 @@ def create_itenary():
         "itenaryid": itenary_id
     ***REMOVED***
 
-    db.collection("users").document(userid).set(***REMOVED***"id": userid***REMOVED***)
+    db.collection("users").document(userid).set(***REMOVED***"id": userid, "budget_currency": input.get("budget_currency", None),
+        "budget_price": input.get("budget_price", None)***REMOVED***)
     itenary_doc = db.collection("users").document(userid).collection("itenaries").document(itenary_id)
     itenary_doc.set(***REMOVED***"id": itenary_id***REMOVED***)
     for key, vals in create_info.items():

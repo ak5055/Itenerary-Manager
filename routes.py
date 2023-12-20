@@ -109,17 +109,13 @@ def create_itenary():
         "tourism": input.get("tourism", [])
     ***REMOVED***
 
-    if not check_if_exists(db, userid):
-        return ***REMOVED***
-            "error": f"User with userid as ***REMOVED***userid***REMOVED*** doesn't exist in the database"
-        ***REMOVED***
-
     itenary_id = uuid.uuid4().hex
     success_msg = ***REMOVED***
         "userid": userid,
         "itenaryid": itenary_id
     ***REMOVED***
 
+    db.collection("users").document(userid).set(***REMOVED***"id": userid***REMOVED***)
     itenary_doc = db.collection("users").document(userid).collection("itenaries").document(itenary_id)
     itenary_doc.set(***REMOVED***"id": itenary_id***REMOVED***)
     for key, vals in create_info.items():

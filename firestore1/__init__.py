@@ -27,7 +27,7 @@ def read_data_db(db):
 
 def check_if_exists(db, userid: str, itenaryid: str = None) -> bool:
     '''
-     Check if userid and itenary id exists in the firestore1 database
+     Check if userid and itenary id exists in the firestore database
     :param db: nosql database object
     :param userid: The user id
     :param itenaryid: The itenary id

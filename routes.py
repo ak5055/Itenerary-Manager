@@ -26,7 +26,10 @@ def getItenaries(userid):
     '''
     db = get_instance()
     itenary_info = db.collection("users").document(userid).get().to_dict() or ***REMOVED******REMOVED***
-    itenary_docs = db.collection("users").document(userid).collection("itenaries")
+    itenary_docs = db.collection("users").document(userid).collection("itenaries").order_by("id")
+    per_page = request.args.get("per_page")
+    page = request.args.get("page")
+    itenary_id = request.args.get("itenaryid")
     itenary_info["itenaries"] = []
 
     if not check_if_exists(db, userid):
@@ -34,13 +37,31 @@ def getItenaries(userid):
             "error": f"User with id ***REMOVED***userid***REMOVED*** doesn't exist"
         ***REMOVED***
 
+    if itenary_id is not None and (per_page is not None or page is not None):
+        return ***REMOVED***
+            "error": "Pagination cannot be applied if itenary id is present as a path param."
+        ***REMOVED***
+
+    if per_page is not None and page is not None:
+        per_page = int(per_page)
+        page = int(page)
+        itenary_docs = itenary_docs.offset((page-1)*per_page).limit(per_page)
+
+    if itenary_id is not None:
+        if not check_if_exists(db, userid, itenary_id):
+            return ***REMOVED***
+                "error": f"User with userid as ***REMOVED***userid***REMOVED*** and itenary id as ***REMOVED***itenary_id***REMOVED*** doesn't exist in the database"
+            ***REMOVED***
+
+        itenary_docs = itenary_docs.start_at(***REMOVED***"id": itenary_id***REMOVED***).limit(1)
+
     for doc in itenary_docs.stream():
         itenary_dict = doc.to_dict()
         itenary_dict["flights"] = []
         itenary_dict["hotels"] = []
         itenary_dict["car_rentals"] = []
         itenary_dict["tourism"] = []
-        doc_obj = itenary_docs.document(doc.id)
+        doc_obj = doc._reference
         flights = doc_obj.collection("flights")
         car_rentals = doc_obj.collection("car_rentals")
         hotels = doc_obj.collection("hotels")

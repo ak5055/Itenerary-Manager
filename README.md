@@ -2,7 +2,7 @@
 
 <ul>
   <li>
-Itenary Planner (interacts with firstore NoSQL serverless database of GCP):
+Itenary Planner Microservice (interacts with firstore NoSQL serverless database of GCP):
     <ul>
 <li>GET /getItenaries/***REMOVED***userId***REMOVED***:
   <ul>
